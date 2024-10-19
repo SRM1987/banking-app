@@ -32,4 +32,18 @@ public class AccountServiceImpl implements AccountService {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public AccountDto depositAmount(Long id, double amount) {
+        try {
+            Account account = accountRepository.findById(id);
+           double total =  account.getBalance() + amount;
+           account.setBalance(total);
+           Account savedAccount = accountRepository.save(account);
+            return AccountMapper.mapToAccountDto(savedAccount);
+        }catch (RuntimeException e){
+            throw new RuntimeException(e);
+        }
+
+    }
 }
