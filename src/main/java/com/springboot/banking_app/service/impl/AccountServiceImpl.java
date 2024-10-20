@@ -2,6 +2,7 @@ package com.springboot.banking_app.service.impl;
 
 import com.springboot.banking_app.dto.AccountDto;
 import com.springboot.banking_app.entity.Account;
+import com.springboot.banking_app.exception.AccountException;
 import com.springboot.banking_app.mapper.AccountMapper;
 import com.springboot.banking_app.repository.AccountRepository;
 import com.springboot.banking_app.service.AccountService;
@@ -28,30 +29,30 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountDto getAccountById(Long id) {
-        try {
-            Account account = accountRepository.findById(id);
-            return AccountMapper.mapToAccountDto(account);
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
+        if (!accountRepository.existsById(id)) {
+            throw new AccountException("Account with ID " + id + " not found.");
         }
+        Account account = accountRepository.findById(id);
+        return AccountMapper.mapToAccountDto(account);
     }
 
     @Override
     public AccountDto depositAmount(Long id, double amount) {
-        try {
-            Account account = accountRepository.findById(id);
-            double total = account.getBalance() + amount;
-            account.setBalance(total);
-            Account savedAccount = accountRepository.save(account);
-            return AccountMapper.mapToAccountDto(savedAccount);
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
+        if (!accountRepository.existsById(id)) {
+            throw new AccountException("Account with ID " + id + " not found.");
         }
-
+        Account account = accountRepository.findById(id);
+        double total = account.getBalance() + amount;
+        account.setBalance(total);
+        Account savedAccount = accountRepository.save(account);
+        return AccountMapper.mapToAccountDto(savedAccount);
     }
 
     @Override
     public AccountDto withdrawAmount(Long id, double amount) {
+        if (!accountRepository.existsById(id)) {
+            throw new AccountException("Account with ID " + id + " not found.");
+        }
         Account account = accountRepository.findById(id);
         if (account.getBalance() < amount) {
             throw new RuntimeException("Insufficient Amount.");
@@ -70,6 +71,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void deleteAccount(Long id) {
+        if (!accountRepository.existsById(id)) {
+            throw new AccountException("Account with ID " + id + " not found.");
+        }
         Account account = accountRepository.findById(id);
         accountRepository.deleteById(id);
     }

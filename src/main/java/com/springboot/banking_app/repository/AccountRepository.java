@@ -10,4 +10,6 @@ public interface AccountRepository extends JpaRepository<Account, Id> {
     Account findById(Long id);
 
     public void deleteById(Long id);
+
+    boolean existsById(Long id);
 }
