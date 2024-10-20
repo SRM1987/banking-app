@@ -1,6 +1,7 @@
 package com.springboot.banking_app.controller;
 
 import com.springboot.banking_app.dto.AccountDto;
+import com.springboot.banking_app.dto.TransferFundDto;
 import com.springboot.banking_app.service.AccountService;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
@@ -50,7 +51,7 @@ public class AccountController {
         return ResponseEntity.ok(accountDto);
     }
 
-    //Get All Acount lists Rest API
+    //Get All Account lists Rest API
     @GetMapping
     public ResponseEntity<List<AccountDto>> getAllAccounts() {
         List<AccountDto> accounts = accountService.getAllAccounts();
@@ -63,5 +64,11 @@ public class AccountController {
     public ResponseEntity<String> deleteAccountById(@PathVariable Long id) {
         accountService.deleteAccount(id);
         return ResponseEntity.ok("Account Deleted Successfully!");
+    }
+
+    @PostMapping("/transfer")
+    public ResponseEntity<String> transferFund(@RequestBody TransferFundDto transferFundDto) {
+        accountService.transferFunds(transferFundDto);
+        return ResponseEntity.ok("Money Transferred Successfully");
     }
 }

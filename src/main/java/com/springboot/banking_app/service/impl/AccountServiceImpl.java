@@ -1,6 +1,7 @@
 package com.springboot.banking_app.service.impl;
 
 import com.springboot.banking_app.dto.AccountDto;
+import com.springboot.banking_app.dto.TransferFundDto;
 import com.springboot.banking_app.entity.Account;
 import com.springboot.banking_app.exception.AccountException;
 import com.springboot.banking_app.mapper.AccountMapper;
@@ -66,7 +67,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<AccountDto> getAllAccounts() {
         List<Account> accounts = accountRepository.findAll();
-        return accounts.stream().map((account) -> AccountMapper.mapToAccountDto(account)).collect(Collectors.toList());
+        return accounts.stream().map(AccountMapper::mapToAccountDto).collect(Collectors.toList());
     }
 
     @Override
@@ -76,5 +77,31 @@ public class AccountServiceImpl implements AccountService {
         }
         Account account = accountRepository.findById(id);
         accountRepository.deleteById(id);
+    }
+
+    @Override
+    public void transferFunds(TransferFundDto transferFundDto) {
+        //Retrieve the account from which we send money
+        if (!accountRepository.existsById(transferFundDto.fromAccountId())) {
+            throw new AccountException("Account with ID " + transferFundDto.fromAccountId() + " not found.");
+        }
+        Account fromAccount = accountRepository.findById(transferFundDto.fromAccountId());
+
+        //Retrieve the account which we receive the money
+        if (!accountRepository.existsById(transferFundDto.toAccountId())) {
+            throw new AccountException("Account with ID " + transferFundDto.toAccountId() + " not found.");
+        }
+        Account toAccount = accountRepository.findById(transferFundDto.toAccountId());
+
+        //Debit the amount from the fromAccount Object
+        fromAccount.setBalance(fromAccount.getBalance() - transferFundDto.amount());
+
+        //Credit the amount to the toAccount object
+        toAccount.setBalance(toAccount.getBalance() + transferFundDto.amount());
+
+        //Save Both Amounts in Database
+        accountRepository.save(fromAccount);
+
+        accountRepository.save(toAccount);
     }
 }
