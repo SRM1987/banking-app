@@ -2,6 +2,7 @@ package com.springboot.banking_app.controller;
 
 import com.springboot.banking_app.dto.AccountDto;
 import com.springboot.banking_app.service.AccountService;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,5 +55,13 @@ public class AccountController {
     public ResponseEntity<List<AccountDto>> getAllAccounts() {
         List<AccountDto> accounts = accountService.getAllAccounts();
         return ResponseEntity.ok(accounts);
+    }
+
+    //Delete Account Rest API
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity<String> deleteAccountById(@PathVariable Long id) {
+        accountService.deleteAccount(id);
+        return ResponseEntity.ok("Account Deleted Successfully!");
     }
 }

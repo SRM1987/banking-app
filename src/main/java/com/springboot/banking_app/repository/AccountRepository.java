@@ -5,6 +5,9 @@ import jakarta.persistence.Id;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AccountRepository extends JpaRepository<Account, Id> {
+
     //Assigning JPA Repository Here ==>
     Account findById(Long id);
+
+    public void deleteById(Long id);
 }

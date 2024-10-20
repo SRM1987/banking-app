@@ -1,9 +1,8 @@
 package com.springboot.banking_app.service;
 
 import com.springboot.banking_app.dto.AccountDto;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service
 public interface AccountService {
@@ -17,4 +16,6 @@ public interface AccountService {
     AccountDto withdrawAmount(Long id, double amount);
 
     List<AccountDto> getAllAccounts();
+
+    void deleteAccount(Long id);
 }
