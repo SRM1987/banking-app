@@ -1,8 +1,10 @@
 package com.springboot.banking_app.service;
 
 import com.springboot.banking_app.dto.AccountDto;
-import java.util.List;
+import com.springboot.banking_app.dto.TransferFundDto;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public interface AccountService {
@@ -18,4 +20,6 @@ public interface AccountService {
     List<AccountDto> getAllAccounts();
 
     void deleteAccount(Long id);
+
+    void transferFunds(TransferFundDto transferFundDto);
 }
