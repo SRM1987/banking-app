@@ -80,13 +80,3 @@ Fetch Transaction History: Get an account's transaction history
 2. Using AccountException
 3. Create ErrorDetails Class to hold error response
 4. Create GlobalExceptionHandler to handle specific exceptions as well as generic exceptions
-
-## **Transfer Amount From One account to Another**
-
-### Development Steps:
-
-1. Create a record class to TransferFundDto to create a json parameters.
-2. Define transferFunds method in AccountService interface.
-3. Implement the method in AccountServiceImpl Class.
-4. Build/transfer Rest API in controller class.
-5. Test/ transfer Rest API using POSTMAN client.
